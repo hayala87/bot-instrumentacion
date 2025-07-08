@@ -4,6 +4,7 @@ import os
 
 app = Flask(__name__)
 
+# Usar la variable de entorno para tu API Key
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 PROMPT_MAESTRO = """
@@ -41,14 +42,13 @@ def webhook():
         ]
     )
     bot_reply = response['choices'][0]['message']['content']
+
     return jsonify({"reply": bot_reply})
 
-@app.route('/', methods=['GET'])
-def home():
-    return "✅ Bot de instrumentación activo. Usa POST en /webhook para enviar mensajes."
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host='0.0.0.0', port=port, debug=False)
+
 
 
 
